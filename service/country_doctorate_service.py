@@ -1,6 +1,5 @@
 from typing import Optional, List
 from model.country_doctorate_docents_faculty import CountryDocentsFaculty
-from config.neo4j_config import Neo4jConfig
 from service.neo4j_execute_query_service import Neo4jService
 
 neo4j_service = Neo4jService()
