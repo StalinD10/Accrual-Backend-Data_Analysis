@@ -1,7 +1,7 @@
 from fastapi.responses import JSONResponse
 
-from utils.convert_df import DataFrameConverter
-from utils.preferred_data_general_docent import PreferredDataGeneralDocent
+from data.convert_df import DataFrameConverter
+from data.preferred_data_general_docent import PreferredDataGeneralDocent
 
 data_frame_converter = DataFrameConverter()
 preferred_data_general_docent = PreferredDataGeneralDocent()
@@ -9,8 +9,6 @@ preferred_data_general_docent = PreferredDataGeneralDocent()
 
 class DataProcessingFaculty:
 
-    # Obtenemos los datos del service y los tratamos:
-    # eliminamos espacios vacios, los nombres los ponemos en minusculas, y eliminamos datos que contengan null
     async def data_processing(self, service, faculty: str = None):
 
         data = await data_frame_converter.convert_df(service)

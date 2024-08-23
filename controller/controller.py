@@ -3,13 +3,17 @@ from fastapi import HTTPException
 from fastapi import HTTPException, status
 
 from service.country_doctorate_service import CountryDoctorateService
-from utils.data_processing_faculty import DataProcessingFaculty
+from data.data_processing_faculty import DataProcessingFaculty
 from service.modality_docent_faculty import ModalityDocentFacultyService
 from service.category_docent_faculty_service import CategoryDocentFacultyService
 from service.institution_docent_faculty_service import InstitutionDocentFacultyService
 from service.docent_in_faculty_service import DocentInFacultyService
 from service.accrual_docent_in_faculty_service import AccrualDocentInFacultyService
+from data.data_processing_subtype_activity import DataProcessingSubtypeActivity
+from data.data_processing_type_activity import DataProcessingTypeActivity
+
 router = APIRouter(prefix="/apiAnalytics")
+
 country_doctorate_service = CountryDoctorateService()
 data_processing = DataProcessingFaculty()
 modality_doctorate_service = ModalityDocentFacultyService()
@@ -17,6 +21,9 @@ category_doctorate_service = CategoryDocentFacultyService()
 institution_doctorate_service = InstitutionDocentFacultyService()
 docent_in_faculty_service = DocentInFacultyService()
 accrual_doctorate_service = AccrualDocentInFacultyService()
+data_processing_subtype = DataProcessingSubtypeActivity()
+data_processing_type = DataProcessingTypeActivity()
+
 
 # Country
 @router.get("/findCountryDoctorateDocentsAll")
@@ -26,6 +33,7 @@ async def find_country_doctorate_docents_all():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
 
+
 @router.get("/findCountryDoctorateDocentsFaculty/{faculty}")
 async def find_country_doctorate_docents_faculty(faculty: str):
     results = await data_processing.process_data_all(
@@ -33,6 +41,7 @@ async def find_country_doctorate_docents_faculty(faculty: str):
     if not results:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
+
 
 @router.get("/findPreferredCountryDoctorate")
 async def find_preferred_country_doctorate(faculty: str = None):
@@ -42,6 +51,7 @@ async def find_preferred_country_doctorate(faculty: str = None):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
 
+
 @router.get("/countCountryFaculty")
 async def count_country_faculty(faculty: str = None):
     results = await data_processing.count_by_faculty(
@@ -49,6 +59,7 @@ async def count_country_faculty(faculty: str = None):
     if not results:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
+
 
 # Modality
 @router.get("/findModalityDocentAll")
@@ -59,6 +70,7 @@ async def find_modality_docents_faculty_all():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
 
+
 @router.get("/findModalityDocent/{faculty}")
 async def find_modality_docent_faculty(faculty: str):
     results = await data_processing.process_data_all(
@@ -66,6 +78,7 @@ async def find_modality_docent_faculty(faculty: str):
     if not results:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
+
 
 @router.get("/findPreferredModalityDocent")
 async def find_preferred_modality_docent(faculty: str = None):
@@ -75,6 +88,7 @@ async def find_preferred_modality_docent(faculty: str = None):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
 
+
 @router.get("/countModalityFaculty")
 async def count_modality_faculty(faculty: str = None):
     results = await data_processing.count_by_faculty(
@@ -83,7 +97,8 @@ async def count_modality_faculty(faculty: str = None):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
 
-#Category
+
+# Category
 @router.get("/findCategoryDocentAll")
 async def find_category_docents_faculty_all():
     results = await data_processing.process_data_all(
@@ -91,6 +106,7 @@ async def find_category_docents_faculty_all():
     if not results:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
+
 
 @router.get("/findCategoryDocent/{faculty}")
 async def find_category_docent_faculty(faculty: str):
@@ -100,6 +116,7 @@ async def find_category_docent_faculty(faculty: str):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
 
+
 @router.get("/findPreferredCategoryDocent")
 async def find_preferred_category_docent(faculty: str = None):
     results = await data_processing.preferred_docent(
@@ -107,6 +124,7 @@ async def find_preferred_category_docent(faculty: str = None):
     if not results:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
+
 
 @router.get("/countCategoryFaculty")
 async def count_modality_faculty(faculty: str = None):
@@ -116,7 +134,8 @@ async def count_modality_faculty(faculty: str = None):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
 
-#Institution
+
+# Institution
 @router.get("/findInstitutionDocentAll")
 async def find_institution_docents_faculty_all():
     results = await data_processing.process_data_all(
@@ -124,6 +143,7 @@ async def find_institution_docents_faculty_all():
     if not results:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
+
 
 @router.get("/findInstitutionDocent/{faculty}")
 async def find_institution_docent_faculty(faculty: str):
@@ -133,6 +153,7 @@ async def find_institution_docent_faculty(faculty: str):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
 
+
 @router.get("/findPreferredInstitutionDocent")
 async def find_preferred_institution_docent(faculty: str = None):
     results = await data_processing.preferred_docent(
@@ -140,6 +161,7 @@ async def find_preferred_institution_docent(faculty: str = None):
     if not results:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
+
 
 @router.get("/countInstitutionFaculty")
 async def count_institution_faculty(faculty: str = None):
@@ -149,7 +171,8 @@ async def count_institution_faculty(faculty: str = None):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
 
-#Docents in Faculty
+
+# Docents in Faculty
 @router.get("/findDocentAll")
 async def find_docents_faculty_all():
     results = await data_processing.process_data_all(
@@ -157,6 +180,7 @@ async def find_docents_faculty_all():
     if not results:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
+
 
 @router.get("/findDocent/{faculty}")
 async def find_docent_faculty(faculty: str):
@@ -166,6 +190,7 @@ async def find_docent_faculty(faculty: str):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
 
+
 @router.get("/countDocentFaculty")
 async def count_docent_faculty(faculty: str = None):
     results = await data_processing.count_docents_faculty(
@@ -174,7 +199,8 @@ async def count_docent_faculty(faculty: str = None):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
 
-#Accrual docents in Faculty
+
+# Accrual docents in Faculty
 @router.get("/findAccrualDocentAll")
 async def find_accrual_docents_faculty_all():
     results = await data_processing.process_data_all(
@@ -182,6 +208,7 @@ async def find_accrual_docents_faculty_all():
     if not results:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
+
 
 @router.get("/findAccrualDocent/{faculty}")
 async def find_accrual_docent_faculty(faculty: str):
@@ -191,10 +218,101 @@ async def find_accrual_docent_faculty(faculty: str):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
 
+
 @router.get("/countAccrualDocentFaculty")
 async def count_accrual_docent_faculty(faculty: str = None):
     results = await data_processing.count_docents_faculty(
         accrual_doctorate_service.find_accrual_docent_by_faculty(faculty))
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
+
+
+# Subtype Activity Docent
+@router.get("/findSubtypeDocentAll")
+async def find_subtype_docents_faculty_all():
+    results = await data_processing_subtype.find_subtype_by_faculty_all()
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
+
+
+@router.get("/findSubtypeDocentByFaculty/{faculty}")
+async def find_subtype_docents_faculty(faculty: str):
+    results = await data_processing_subtype.find_subtype_by_faculty(faculty)
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
+
+
+@router.get("/findDocentByFacultySubtype/{faculty},{subtype}")
+async def find_subtype_docents_faculty(faculty: str, subtype: str):
+    results = await data_processing_subtype.find_by_faculty_and_column(faculty, "Subtype", subtype)
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
+
+
+@router.get("/findFrecuentSubtype")
+async def find_frecuent_subtype(faculty: str = None):
+    results = await data_processing_subtype.frequent_subtype(faculty)
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
+
+
+# Type Activity Docent
+@router.get("/findTypeDocentAll")
+async def find_subtype_docents_faculty_all():
+    results = await data_processing_type.find_type_by_faculty_all()
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
+
+
+@router.get("/findTypeDocentByFaculty/{faculty}")
+async def find_subtype_docents_faculty(faculty: str):
+    results = await data_processing_type.find_type_by_faculty(faculty)
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
+
+
+@router.get("/findDocentByFacultyType/{faculty},{subtype}")
+async def find_subtype_docents_faculty(faculty: str, type: str):
+    results = await data_processing_type.find_by_faculty_and_column(faculty, "Typeactivity", type)
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
+
+
+@router.get("/findFrecuentType")
+async def find_frecuent_subtype(faculty: str = None):
+    results = await data_processing_type.frequent_type(faculty)
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
+
+
+@router.get("/activityTypeTrends")
+async def activity_type_trends():
+    results = await data_processing_type.activity_type_trends()
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
+
+
+@router.get("/mostActiveDocents")
+async def most_active_docents(top: int = 10):
+    results = await data_processing_type.identify_most_active_docents(top)
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
+
+
+@router.get("/findTypeActivityByPeriod/{period}")
+async def find_type_activity_by_period(period: str):
+    results = await data_processing_type.find_type_by_period(period)
     if not results:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
