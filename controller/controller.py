@@ -24,7 +24,6 @@ accrual_doctorate_service = AccrualDocentInFacultyService()
 data_processing_subtype = DataProcessingSubtypeActivity()
 data_processing_type = DataProcessingTypeActivity()
 
-
 # Country
 @router.get("/findCountryDoctorateDocentsAll")
 async def find_country_doctorate_docents_all():
@@ -181,6 +180,13 @@ async def find_docents_faculty_all():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
 
+@router.get("/statisticsDocent")
+async def stadistics_docents_faculty():
+    results = await data_processing.statistics_docent()
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
+
 
 @router.get("/findDocent/{faculty}")
 async def find_docent_faculty(faculty: str):
@@ -268,6 +274,7 @@ async def find_subtype_docents_faculty_all():
     if not results:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
+    return resultss
 
 
 @router.get("/findTypeDocentByFaculty/{faculty}")
