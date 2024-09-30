@@ -2,12 +2,10 @@ from fastapi.responses import JSONResponse
 
 from data.convert_df import DataFrameConverter
 from data.preferred_data_general_docent import PreferredDataGeneralDocent
-from data.data_statistics import DataStatistics
 from service.docent_in_faculty_service import DocentInFacultyService
 
 data_frame_converter = DataFrameConverter()
 preferred_data_general_docent = PreferredDataGeneralDocent()
-data_statistics = DataStatistics()
 docent_service = DocentInFacultyService()
 
 
@@ -41,11 +39,6 @@ class DataProcessingFaculty:
         }
         return result
 
-    # estadisticas generales del docente
-    async def statistics_docent(self):
-        df = await data_statistics.calculate_statistics(docent_service.find_docent_by_faculty())
-        return JSONResponse(content=df)
-
     # Obtenemos una lista de los 10 modalidades preferidos por los docentes para hacer su devengamiento
     async def preferred_docent(self, service, column_preferred: str, faculty: str = None):
         df = await self.data_processing(service, faculty)
@@ -75,3 +68,4 @@ class DataProcessingFaculty:
         count_df = count_by_faculty.sort_values(by='Count', ascending=False)
         json_result = count_df.to_dict(orient='records')
         return json_result
+

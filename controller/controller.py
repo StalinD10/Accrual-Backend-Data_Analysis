@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from fastapi import HTTPException
 from fastapi import HTTPException, status
+from data.data_statistics import DataStatistics
 
 from service.country_doctorate_service import CountryDoctorateService
 from data.data_processing_faculty import DataProcessingFaculty
@@ -23,6 +24,8 @@ docent_in_faculty_service = DocentInFacultyService()
 accrual_doctorate_service = AccrualDocentInFacultyService()
 data_processing_subtype = DataProcessingSubtypeActivity()
 data_processing_type = DataProcessingTypeActivity()
+data_statistics = DataStatistics()
+
 
 # Country
 @router.get("/findCountryDoctorateDocentsAll")
@@ -180,13 +183,49 @@ async def find_docents_faculty_all():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
 
-@router.get("/statisticsDocent")
+#Estadistics
+
+@router.get("/measuresTendencyCentral")
 async def stadistics_docents_faculty():
-    results = await data_processing.statistics_docent()
+    results = await data_statistics.calculate_measures_central_tendency(
+        docent_in_faculty_service.find_docent_by_faculty())
     if not results:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
 
+
+@router.get("/generalDispersionStats")
+async def general_dispersion_stats():
+    results = await data_statistics.calculate_general_dispersion_stats(
+        docent_in_faculty_service.find_docent_by_faculty())
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
+
+
+@router.get("/dispersionStatsCategory")
+async def dispersion_stats_category():
+    results = await data_statistics.calculate_dispersion_stats(
+        category_doctorate_service.find_category_docent_faculty(), "Category")
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
+
+@router.get("/positionalMeasures")
+async def positional_measures():
+    results = await data_statistics.calculate_positioning_measures(
+        docent_in_faculty_service.find_docent_by_faculty())
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
+
+@router.get("/frecuencyTableDocents")
+async def frecuency_table_docents():
+    results = await data_statistics.calculate_frequency_table(
+        docent_in_faculty_service.find_docent_by_faculty())
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
+    return results
 
 @router.get("/findDocent/{faculty}")
 async def find_docent_faculty(faculty: str):
@@ -274,7 +313,6 @@ async def find_subtype_docents_faculty_all():
     if not results:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No results found")
     return results
-    return resultss
 
 
 @router.get("/findTypeDocentByFaculty/{faculty}")
